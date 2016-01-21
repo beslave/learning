@@ -1,7 +1,35 @@
 # coding: utf-8
 
-from numpy import tile
+from numpy import shape, tile, zeros
 from operator import itemgetter
+
+
+def import_dataset(filename, features_number=3):
+    with open(filename) as f:
+        lines_number = len(f.readlines())
+
+    data_set = zeros((lines_number, features_number))
+    labels = []
+
+    with open(filename) as f:
+        for i, line in enumerate(f.readlines()):
+            line = line.strip()
+            list_from_line = line.split('\t')
+            data_set[i, :] = list_from_line[0: features_number]
+            labels.append(int(list_from_line[-1]))
+
+    return data_set, labels
+
+
+def normalize(data_set):
+    min_vals = data_set.min(0)
+    max_vals = data_set.max(0)
+    ranges = max_vals - min_vals
+    norm_data_set = zeros(shape(data_set))
+    m = data_set.shape[0]
+    norm_data_set = data_set - tile(min_vals, (m, 1))
+    norm_data_set = norm_data_set / tile(ranges, (m, 1))
+    return norm_data_set, ranges, min_vals
 
 
 def classify(x, data_set, labels, k):
