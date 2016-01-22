@@ -5,7 +5,7 @@ import os
 from matplotlib import pyplot as plt
 from numpy import array
 
-from .logic import classify, import_dataset
+from .logic import classify, import_dataset, normalize
 
 
 def create_data_set():
@@ -25,6 +25,7 @@ def test_base():
 
 
 def test_dating_set():
+    ho_ratio = 0.1
     filepath = os.path.join(
         os.getcwd(),
         os.path.dirname(__file__),
@@ -33,6 +34,22 @@ def test_dating_set():
         'datingTestSet2.txt'
     )
     data_set, labels = import_dataset(filepath)
+    norm_data_set, ranges, min_vals = normalize(data_set)
+    m = norm_data_set.shape[0]
+    num_test = int(m * ho_ratio)
+    error_count = 0.0
+
+    for i in range(num_test):
+        classifier_result = classify(
+            norm_data_set[i, :],
+            norm_data_set[num_test:m, :],
+            labels[num_test:m],
+            7
+        )
+        if classifier_result != labels[i]:
+            error_count += 1.0
+
+    print 'the total error rate is: %f' % (error_count / num_test)
 
     colors = []
     sizes = 15.0 * array(labels)
