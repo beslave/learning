@@ -4,7 +4,7 @@ from fabric.api import task
 from matplotlib import pyplot as plt
 from numpy import array
 
-from .logic import classify, import_dataset, normalize
+from knn.logic import classify, import_dataset, normalize
 from helpers import data_path, data_out_path
 
 
