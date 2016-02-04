@@ -84,3 +84,24 @@ def create_tree(data_set, labels):
         )
 
     return tree
+
+
+def get_leafs_number(tree):
+    num_leafs = 0
+    label = tree.keys()[0]
+
+    for value, node in tree[label].iteritems():
+        num_leafs += get_leafs_number(node) if isinstance(node, dict) else 1
+
+    return num_leafs
+
+
+def get_tree_depth(tree):
+    max_depth = 0
+    label = tree.keys()[0]
+
+    for value, node in tree[label].iteritems():
+        depth = 1 + get_tree_depth(node) if isinstance(node, dict) else 1
+        max_depth = max(max_depth, depth)
+
+    return max_depth
