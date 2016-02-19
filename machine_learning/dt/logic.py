@@ -1,7 +1,11 @@
 # coding: utf-8
 
+import pickle
+
 from collections import Counter
 from math import log
+
+from helpers import data_out_path
 
 
 def shannon_entropy(data_set):
@@ -119,3 +123,13 @@ def classify(tree, labels, data_vector):
                 class_label = node
 
     return class_label
+
+
+def dump_tree(tree, filename):
+    with open(data_out_path(filename), 'w') as f:
+        pickle.dump(tree, f)
+
+
+def load_tree(filename):
+    with open(data_out_path(filename), 'r') as f:
+        return pickle.load(f)
