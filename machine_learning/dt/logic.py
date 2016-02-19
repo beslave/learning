@@ -105,3 +105,17 @@ def get_tree_depth(tree):
         max_depth = max(max_depth, depth)
 
     return max_depth
+
+
+def classify(tree, labels, data_vector):
+    label = tree.keys()[0]
+    label_index = labels.index(label)
+
+    for value, node in tree[label].iteritems():
+        if data_vector[label_index] == value:
+            if isinstance(node, dict):
+                class_label = classify(node, labels, data_vector)
+            else:
+                class_label = node
+
+    return class_label
